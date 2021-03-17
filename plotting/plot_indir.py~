@@ -6,9 +6,9 @@ import sys
 import random as rnd
 
 all_files = os.listdir() # get list of all files in the working directory
-all_files.remove('zoutput.txt')
+all_files.remove('outputs')
 
-n_eps = int(sys.argv[1]) # give the numebr of eps you want to plot
+n_eps = int(sys.argv[1]) # give the number of eps you want to plot
 files = rnd.sample(all_files, n_eps) # pick n-eps number of eps at random
 
 # preparing x-values (values of r)
@@ -66,7 +66,7 @@ plt.xlabel('r')
 #plt.axis([0, 0.07, 0, 1])
 #plt.xticks([0, 0.01, 0.02, 0.03])
 plt.legend()
-plt.show()
+plt.savefig("graf.png")
 
 
 # m, b = np.polyfit(r_diff, fc, 1)

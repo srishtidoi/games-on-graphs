@@ -2,23 +2,28 @@
 
 #### parameters
 
-population=1600
-eps=20
+population=25
+eps=2
 network=scalefree
 rule=bayesian
 
 #### make and cd to new directory
 #### add comments at the end (more_r, more_t, etc.)
 
-dirname="phase_diagrams_n"$population"e"$eps"_"$network"_"$rule'_'
+dirname=$network"_"$rule"_n"$population"e"$eps"_test"
 mkdir $dirname
 cd $dirname
+mkdir outputs
 
 #### run the simulation
-python3 ../main.py $population $eps $network $rule | tee zoutput.txt
+python3 ../main.py $population $eps $network $rule | tee outputs/zoutput.txt
 
 ### split output file
-#mkdir outputs
-#mv zoutput.txt outputs
-#cd outputs
-#split -l 1000000 -d --additional-suffix=.txt zoutput.txt file
+cd outputs
+split -l 1000000 -d --additional-suffix=.txt zoutput.txt file
+
+### plot the graph
+cd ..
+python3 ../plotting/plot_indir.py $eps save
+
+
