@@ -145,7 +145,7 @@ class Simulation:
                 comment = "fc 0 or 1"
                 break
             
-            if t >= tc and np.absolute(np.mean(fc_hist[t-tavg:t-1]) - fc)/fc < 0.0001:
+            if t >= tc and np.absolute(np.mean(fc_hist[t-tavg:t-1]) - fc)/fc < 0.01:
                 fc_converged = np.mean(fc_hist[t-tavg:t])
                 comment = "fc converged"
                 break
@@ -174,7 +174,7 @@ class Simulation:
         # n2 = np.arange(0.02, 0.022, 0.0004)
         # n3 = np.arange(0.022, 0.032, 0.002)
         # r_range = np.append(n1, n2)
-        # r_range = np.append(r_range, n3)
+        # r_range = np.append(r8_range, n3)
 
         r_range = np.arange(0, 0.3, 0.003)
         for r in r_range:
