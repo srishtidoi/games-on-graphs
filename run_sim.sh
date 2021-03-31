@@ -2,15 +2,16 @@
 
 #### parameters
 
+note=moreq
 population=100
-eps=100
-network=RR
+eps=20
+network=smallworld
 rule=bayesian
 
 #### make and cd to new directory
 #### add comments at the end (more_r, more_t, etc.)
 
-dirname=$network"_"$rule"_n"$population"e"$eps"_hpk"
+dirname=$network"_"$rule"_n"$population"e"$eps"_"$note
 mkdir $dirname
 cd $dirname
 mkdir outputs

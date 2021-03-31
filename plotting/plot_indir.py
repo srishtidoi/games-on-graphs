@@ -71,7 +71,7 @@ plt.legend()
 if sys.argv[2] == 'show':
         plt.show()
 elif sys.argv[2] == 'save':
-        plt.savefig("graf.png")
+        plt.savefig("outputs/graf.png")
 
 
 # m, b = np.polyfit(r_diff, fc, 1)

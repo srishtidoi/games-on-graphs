@@ -44,7 +44,7 @@ class Agent:
                 stop = True
 
         # update probabiities of all strats
-        k = 1.3 # noise parameter
+        k = 1.5 # noise parameter
         if stop == False:
             probability_diff = 0.4/(1 + np.exp((avg_opp - self.point)/k)) - 0.1
             #print(probability_diff)
