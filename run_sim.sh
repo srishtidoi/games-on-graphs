@@ -3,14 +3,14 @@
 #### parameters
 
 population=100
-eps=10
-network=lattice
+eps=100
+network=RR
 rule=bayesian
 
 #### make and cd to new directory
 #### add comments at the end (more_r, more_t, etc.)
 
-dirname=$network"_"$rule"_n"$population"e"$eps"_"
+dirname=$network"_"$rule"_n"$population"e"$eps"_hpk"
 mkdir $dirname
 cd $dirname
 mkdir outputs
