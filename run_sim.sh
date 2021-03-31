@@ -2,9 +2,9 @@
 
 #### parameters
 
-population=25
-eps=2
-network=scalefree
+population=100
+eps=20
+network=smallworld
 rule=bayesian
 
 #### make and cd to new directory

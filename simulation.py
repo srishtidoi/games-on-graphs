@@ -27,7 +27,7 @@ class Simulation:
             self.network = nx.random_regular_graph(average_degree, population)
 
         elif self.network_type == 'smallworld':
-            self.network = nx.watts_strogatz_graph(population, average_degree, 0.03)
+            self.network = nx.watts_strogatz_graph(population, average_degree, 0.3)
 
         elif self.network_type == 'scalefree':
             self.network = nx.barabasi_albert_graph(population, average_degree)
