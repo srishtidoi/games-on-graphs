@@ -176,7 +176,7 @@ class Simulation:
         # r_range = np.append(n1, n2)
         # r_range = np.append(r_range, n3)
 
-        r_range = np.arange(0, 0.008, 0.004)
+        r_range = np.arange(0, 0.003, 0.3)
         for r in r_range:
             fc_converged = self.__play_game(episode, r, rule = rule)
             new_result = pd.DataFrame([[format(r, '.4f'), fc_converged]], columns = ['r', 'fc'])
