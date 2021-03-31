@@ -3,8 +3,8 @@
 #### parameters
 
 population=100
-eps=20
-network=smallworld
+eps=10
+network=lattice
 rule=bayesian
 
 #### make and cd to new directory
