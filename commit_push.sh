@@ -5,6 +5,6 @@
 message="$1"
 
 git add ${@: 2}
-git commit -m message 
+git commit -m "$message" 
 git push -v origin master
 
