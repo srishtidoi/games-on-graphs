@@ -1,0 +1,6 @@
+Q value changed from 0.03 to 0.3. Will change it further and see how the output changes with Q values.
+r = 0:0.3(0.003)
+prob threshold = 0.2 (k=1.5)
+old convergence condition (slow)
+
+observation: 0.03 was all flat. 0.3 has a small fc in the beginning 

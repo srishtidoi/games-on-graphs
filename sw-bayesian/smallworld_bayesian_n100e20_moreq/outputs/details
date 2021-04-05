@@ -1,0 +1,6 @@
+Q value increased to 0.6. 
+r = 0:0.3(0.003)
+prob threshold = 0.2 (k=1.5)
+new convergence condition (faster)
+
+observation: fc tapers of slower than it did for lower value of Q 
