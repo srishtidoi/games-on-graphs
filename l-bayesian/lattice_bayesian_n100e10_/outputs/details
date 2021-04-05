@@ -1,0 +1,6 @@
+lattice sim with a larger range of r
+r = 0:0.7(0.005)
+prob threshold = 0.2 (k=1.5)
+old convergence condition
+
+observation: fc doesn't go to zero even at high values of r. Will change params and see behaviour
