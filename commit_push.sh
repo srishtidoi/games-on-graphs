@@ -1,6 +1,6 @@
 ### to add, commit and push the files/folders in the argument
 ### first arg is commit message
-### remaining are file/folder names
+### remaining arguments are file/folder names
 
 message="$1"
 
