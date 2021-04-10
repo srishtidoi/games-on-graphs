@@ -57,16 +57,21 @@ for filename in files:
 print('fc = ', fc)
 fc = fc/len(files) # taking average over all episodes
 fd = 1 - fc # fraction of defectors
+fit = np.poly1d(np.polyfit(x, fc, 3))
+fit_x = np.linspace(0, 0.7, 100)
 
 plt.scatter(x, fc, s=10, marker='D', facecolors='none', edgecolors='g', label = 'cooperators')
-plt.scatter(x, fd, s=10, marker='^', facecolors='none', edgecolors='r', label = 'defectors')
+plt.plot(fit_x, fit(fit_x))
+#plt.scatter(x, fd, s=10, marker='^', facecolors='none', edgecolors='r', label = 'defectors')
 #plt.plot(x, fc, 'g--')
 #plt.plot(x, fd, 'r--')
-plt.ylabel('Fraction of population')
+plt.ylabel('Fraction of cooperators')
 plt.xlabel('r')
+plt.xlim([0,0.8])
+plt.ylim([0,1])
 #plt.axis([0, 0.07, 0, 1])
 #plt.xticks([0, 0.01, 0.02, 0.03])
-plt.legend()
+#plt.legend()
 
 if sys.argv[2] == 'show':
         plt.show()
