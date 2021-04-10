@@ -7,6 +7,7 @@ class Agent:
         self.point = 0.0    
         self.strategy = None
         self.next_strategy = None
+        self.reputation = 0.05
         self.strats = []
         self.stratpoints = []
         self.neighbors_id = [] # list of ids of all the neighbours of the focal agent
@@ -46,19 +47,59 @@ class Agent:
         # update probabiities of all strats
         k = 1.5 # noise parameter
         if stop == False:
-            probability_diff = 0.4/(1 + np.exp((avg_opp - self.point)/k)) - 0.2
+            probability_diff = 0.6/(1 + np.exp((avg_opp - self.point)/k)) - 0.3
             #print(probability_diff)
             self.stratpoints[current_strat_id] += probability_diff
             self.stratpoints[other_strat_id] = 1 - self.stratpoints[current_strat_id]
 
         self.next_strategy = self.strats[self.stratpoints.index(max(self.stratpoints))]
 
+    def __reputation(self, agents): # update rule reputation
+        ''' with fermi-like probability, imitate the neighbour with highest reputation (with probability p)
+        or imitate a randomly chosen neighbour (with probability 1-p)'''
+
+        p = 0.5 # probability with which highest reputation neighbour is chosen
+
+        if rnd.random()<p:
+            neighbors = [agents[i] for i in self.neighbors_id]
+            reps = [opp.reputation for opp in neighbors]
+            max_rep = max(reps)
+            max_index = reps.index(max_rep)
+            max_opp = neighbors[max_index]
+            
+            k = 0.05 # noise parameter
+            transition_prob = 1/(1 + np.exp((self.reputation - max_rep)/k)) # transition probability
+
+            if max_opp.strategy != self.strategy and rnd.random() < transition_prob:
+                self.next_strategy = max_opp.strategy
+            else:
+                self.next_strategy = self.strategy
+
+        else:
+            opp_id = rnd.choice(self.neighbors_id) # choose random opponent from neighbors
+            opp = agents[opp_id] # agents = list of all agents
+            k = 0.1 # noise parameter
+            transition_prob = 1/(1 + np.exp((self.point - opp.point)/k)) # transition probability
+
+            # Imitate the strategy of a randomly picked neighbor with probablility = transition_prob
+            if opp.strategy != self.strategy and rnd.random() < transition_prob:
+                self.next_strategy = opp.strategy
+            else:
+                self.next_strategy = self.strategy
+
+                
+        if self.next_strategy == 'C':
+                self.reputation = (self.reputation)*(2 - self.reputation)
+                
+        
     def decide_next_strategy(self, agents, rule):
         ''' rule = learning rule (imitate, bayesian) '''
         if rule == "imitate":
             self.__imitate(agents)
         elif rule == "bayesian":
             self.__bayesian(agents)
+        elif rule == "reputation":
+            self.__reputation(agents)
 
     def update_strategy(self):
         self.strategy = self.next_strategy

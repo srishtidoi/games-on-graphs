@@ -72,7 +72,7 @@ class Simulation:
             agent.strats = ['C', 'D']
             agent.stratpoints = [0.5, 0.5] # initial points for bayesian rule
 
-        if rule == 'imitate':
+        if rule == 'imitate' or rule == 'reputation':
             for index, focal in enumerate(self.agents):
                 if index in self.initial_cooperators:
                     focal.strategy = 'C' # Cooperators
@@ -103,7 +103,7 @@ class Simulation:
                     focal.point += P
 
     def __update_strategy(self, rule):
-        if rule == 'imitate':
+        if rule == 'imitate' or rule == 'reputation':
             focal = rnd.choice(self.agents)
             focal.decide_next_strategy(self.agents, rule = rule)
             focal.update_strategy()
@@ -123,10 +123,16 @@ class Simulation:
     def __play_game(self, episode, r, rule):
         ''' continue game untill fc converges '''
 
-        tmax = 1000000
-        tc = 10000 # t after which convergence condition is checked
-        tavg = 100 # t over which avg is taken to check convergence
+        if rule == 'bayesian':
+            tmax = 1000000
+            tc = 10000 # t after which convergence condition is checked
+            tavg = 100 # t over which avg is taken to check convergence
 
+        elif rule == 'imitate' or rule == 'reputation':
+            tmax = 100000000
+            tc = 1000000
+            tavg = 5000
+            
         self.__initialize_strategy(rule = rule)
         initial_fc = self.__count_fc()
         fc_hist = [initial_fc]
@@ -164,7 +170,7 @@ class Simulation:
 
         result = pd.DataFrame({'r': [], 'fc': []})
 
-        if rule == 'imitate':
+        if rule == 'imitate' or rule == 'reputation':
             self.__choose_initial_cooperators()
 
 
@@ -176,7 +182,7 @@ class Simulation:
         # r_range = np.append(n1, n2)
         # r_range = np.append(r8_range, n3)
 
-        r_range = np.arange(0, 0.3, 0.003)
+        r_range = np.arange(0, 0.7, 0.005)
         for r in r_range:
             fc_converged = self.__play_game(episode, r, rule = rule)
             new_result = pd.DataFrame([[format(r, '.4f'), fc_converged]], columns = ['r', 'fc'])
