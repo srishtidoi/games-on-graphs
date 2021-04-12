@@ -6,9 +6,11 @@ import os
 import sys
 import random as rnd
 
-dirs = ['scalefree_reputation_n100e100_','scalefree_reputation_n100e100_p0.7','scalefree_reputation_n100e100_p0.8','scalefree_reputation_n100e100_p0.95']
+dirs = ['smallworld_reputation_n100e100_', 'smallworld_reputation_n100e100_p0.7', 'smallworld_reputation_n100e100_p0.9']
 
-legend = ['p = 0.5', 'p = 0.7', 'p = 0.8', 'p = 0.9']
+    #'scalefree_reputation_n100e100_','scalefree_reputation_n100e100_p0.7','scalefree_reputation_n100e100_p0.8','scalefree_reputation_n100e100_p0.95']
+
+legend = ['p = 0.5', 'p = 0.7', 'p = 0.9']
 x_list = []
 fc_list = []
 fit_list = []
@@ -70,27 +72,30 @@ for d in dirs:
     print('fc = ', fc)
     fc = fc/len(files) # taking average over all episodes
     fd = 1 - fc # fraction of defectors
-    #fit = np.poly1d(np.polyfit(x, fc, 1))
-    model = sm.OLS(fc - 0.5, x).fit()
+    fit = np.poly1d(np.polyfit(x, fc, 4))
+    #model = sm.OLS(fc - 0.5, x).fit()
 
-    plt.plot(x, fc, 'k-', linewidth=0.5, alpha=0.6)
+    legend_label = legend[dirs.index(d)]
+    plt.plot(x, fc, linewidth=1, label=legend_label)
     x_list.append(x)
     fc_list.append(fc)
-    #fit_list.append(fit)
-    model_list.append(model)
+    fit_list.append(fit)
+    #model_list.append(model)
     os.chdir('..')
 
-for model in model_list:
+for fit in fit_list:
     
     #plt.scatter(x, fc, s=10, marker='D', facecolors='none', edgecolors='g', label = 'cooperators')
-    legend_label = legend[model_list.index(model)]
-    plt.plot(fit_x,(0.5+model.predict(fit_x)), label=legend_label)
+    #legend_label = legend[model_list.index(model)]
+    #legend_label = legend[fit_list.index(fit)]
+    #plt.plot(fit_x,(0.5+model.predict(fit_x)), label=legend_label)
+    #plt.plot(fit_x,fit(fit_x), label=legend_label)
     #plt.scatter(x, fd, s=10, marker='^', facecolors='none', edgecolors='r', label = 'defectors')
     #
     #plt.plot(x, fd, 'r--')
     plt.ylabel('Fraction of cooperators')
     plt.xlabel('r')
-    plt.xlim([0,1])
+    plt.xlim([0,0.5])
     plt.ylim([0,1])
     #plt.axis([0, 0.07, 0, 1])
     #plt.xticks([0, 0.01, 0.02, 0.03])
