@@ -1,15 +1,17 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import statsmodels.api as sm
 import csv
 import os
 import sys
 import random as rnd
 
-dirs = ['scalefree_reputation_n100e100_','scalefree_reputation_n100e100_p0.7','scalefree_reputation_n100e100_p0.9']
+dirs = ['scalefree_reputation_n100e100_','scalefree_reputation_n100e100_p0.7','scalefree_reputation_n100e100_p0.8','scalefree_reputation_n100e100_p0.95']
 
 x_list = []
 fc_list = []
 fit_list = []
+model_list = []
 fit_x = np.linspace(0, 1, 100)
 
 for d in dirs:
@@ -67,19 +69,22 @@ for d in dirs:
     print('fc = ', fc)
     fc = fc/len(files) # taking average over all episodes
     fd = 1 - fc # fraction of defectors
-    fit = np.poly1d(np.polyfit(x, fc, 3))
-    
+    #fit = np.poly1d(np.polyfit(x, fc, 1))
+    model = sm.OLS(fc - 0.5, x).fit()
+
+    plt.plot(x, fc, 'k-', linewidth=0.5, alpha=0.8)
     x_list.append(x)
     fc_list.append(fc)
-    fit_list.append(fit)
+    #fit_list.append(fit)
+    model_list.append(model)
     os.chdir('..')
 
-for fit in fit_list:
+for model in model_list:
     
     #plt.scatter(x, fc, s=10, marker='D', facecolors='none', edgecolors='g', label = 'cooperators')
-    plt.plot(fit_x, fit(fit_x))
+    plt.plot(fit_x,(0.5+model.predict(fit_x)))
     #plt.scatter(x, fd, s=10, marker='^', facecolors='none', edgecolors='r', label = 'defectors')
-    #plt.plot(x, fc, 'g--')
+    #
     #plt.plot(x, fd, 'r--')
     plt.ylabel('Fraction of cooperators')
     plt.xlabel('r')
@@ -87,8 +92,8 @@ for fit in fit_list:
     plt.ylim([0,1])
     #plt.axis([0, 0.07, 0, 1])
     #plt.xticks([0, 0.01, 0.02, 0.03])
-    #plt.legend()
 
+plt.legend()
 plt.show()
 
     # m, b = np.polyfit(r_diff, fc, 1)
