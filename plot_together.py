@@ -8,6 +8,7 @@ import random as rnd
 
 dirs = ['scalefree_reputation_n100e100_','scalefree_reputation_n100e100_p0.7','scalefree_reputation_n100e100_p0.8','scalefree_reputation_n100e100_p0.95']
 
+legend = ['p = 0.5', 'p = 0.7', 'p = 0.8', 'p = 0.9']
 x_list = []
 fc_list = []
 fit_list = []
@@ -72,7 +73,7 @@ for d in dirs:
     #fit = np.poly1d(np.polyfit(x, fc, 1))
     model = sm.OLS(fc - 0.5, x).fit()
 
-    plt.plot(x, fc, 'k-', linewidth=0.5, alpha=0.8)
+    plt.plot(x, fc, 'k-', linewidth=0.5, alpha=0.6)
     x_list.append(x)
     fc_list.append(fc)
     #fit_list.append(fit)
@@ -82,7 +83,8 @@ for d in dirs:
 for model in model_list:
     
     #plt.scatter(x, fc, s=10, marker='D', facecolors='none', edgecolors='g', label = 'cooperators')
-    plt.plot(fit_x,(0.5+model.predict(fit_x)))
+    legend_label = legend[model_list.index(model)]
+    plt.plot(fit_x,(0.5+model.predict(fit_x)), label=legend_label)
     #plt.scatter(x, fd, s=10, marker='^', facecolors='none', edgecolors='r', label = 'defectors')
     #
     #plt.plot(x, fd, 'r--')
