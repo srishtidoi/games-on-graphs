@@ -43,22 +43,29 @@ class Agent:
         for i in self.stratpoints:
             if abs(i-1) < 0.0001:
                 stop = True
+            elif i<0:
+                stop = True
+            elif i>1:
+                stop = True
 
         # update probabiities of all strats
         k = 1.5 # noise parameter
         if stop == False:
-            probability_diff = 0.6/(1 + np.exp((avg_opp - self.point)/k)) - 0.3
+            probability_diff = 0.1/(1 + np.exp((avg_opp - self.point)/k)) - 0.05
             #print(probability_diff)
             self.stratpoints[current_strat_id] += probability_diff
             self.stratpoints[other_strat_id] = 1 - self.stratpoints[current_strat_id]
 
-        self.next_strategy = self.strats[self.stratpoints.index(max(self.stratpoints))]
+        if rnd.random()<self.stratpoints[0]:
+            self.next_strategy = self.strats[0]
+        else:
+            self.next_strategy = self.strats[1]
 
     def __reputation(self, agents): # update rule reputation
         ''' with fermi-like probability, imitate the neighbour with highest reputation (with probability p)
         or imitate a randomly chosen neighbour (with probability 1-p)'''
 
-        p = 0.5 # probability with which highest reputation neighbour is chosen
+        p = 0.6 # probability with which highest reputation neighbour is chosen
 
         if rnd.random()<p:
             neighbors = [agents[i] for i in self.neighbors_id]
