@@ -7,7 +7,12 @@ import random as rnd
 
 all_files = os.listdir() # get list of all files in the working directory
 #print(all_files)
-all_files.remove('outputs')
+
+for f in all_files:
+        if f == "outputs":
+                all_files.remove('outputs')
+        if f == "Figure_1.png":
+                all_files.remove('Figure_1.png')
 
 n_eps = int(sys.argv[1]) # give the number of eps you want to plot
 files = rnd.sample(all_files, n_eps) # pick n-eps number of eps at random
