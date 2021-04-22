@@ -57,7 +57,7 @@ class Simulation:
         G = nx.grid_graph(dim = [n,n])
         return G
 
-    def __choose_initial_cooperators(self): # for imitate rule only
+    def __choose_initial_cooperators(self): # for imitate and repuation rules only
         ''' choose the initial cooperators (modify initial fraction of cooperators here)'''
 
         population = len(self.agents)
@@ -69,6 +69,7 @@ class Simulation:
 
         # define strategies for each agent (used for bayesian)
         for agent in self.agents:
+            #agent.reputation = 0.05 # initial reputation for reputation rule
             agent.strats = ['C', 'D']
             agent.stratpoints = [0.5, 0.5] # initial points for bayesian rule
 
@@ -138,11 +139,17 @@ class Simulation:
         fc_hist = [initial_fc]
         print(f"Episode:{episode}, r:{r:.4f}, Time: 0, fc:{initial_fc:.3f}")
 
+        self.__take_snapshot(0, episode)
         for t in range(1, tmax+1):
             self.__count_payoff(r)
-            self.__update_strategy(rule = rule) # rule = imitate, bayesian
+            self.__update_strategy(rule = rule) # rule = imitate, bayesian, reputation
             fc = self.__count_fc()
             fc_hist.append(fc)
+
+            # take a snapshot every 100th timestep
+            if t%100 == 0:
+                self.__take_snapshot(t, episode)
+                
             print(f"Episode:{episode}, r:{r:.4f}, Time:{t}, fc:{fc:.3f}")
 
             # Convergence conditions
@@ -165,6 +172,45 @@ class Simulation:
 
         return fc_converged
 
+    def __take_snapshot(self, timestep, episode):
+        if self.network_type == "lattice":
+            n = int(np.sqrt(len(self.agents)))
+            for index, focal in enumerate(self.agents):
+                if focal.strategy == "C":
+                    self.network.nodes[int(index//n), int(index%n)]["strategy"] = "C"
+                else:
+                    self.network.nodes[int(index//n), int(index%n)]["strategy"] = "D"                
+                
+            def color_for_lattice(i,j):
+                if self.network.nodes[i,j]["strategy"] == "C":
+                    return 'cyan'
+                else:
+                    return 'pink'
+
+            color = dict(((i, j), color_for_lattice(i,j)) for i,j in self.network.nodes())
+            pos = dict((n, n) for n in self.network.nodes())
+        
+        else:
+            val_map = {}
+            for index, focal in enumerate(self.agents):
+                #self.network.nodes[index]["reputation"] = focal.reputation
+                val_map[index] = focal.reputation
+
+            #print(val_map)
+            values = [val_map.get(node, 0.05) for node in self.network.nodes()]
+            pos = nx.spring_layout(self.network)
+                
+        nx.draw_networkx_edges(self.network, pos, width=0.5, alpha=0.6)
+        nx.draw_networkx_nodes(self.network, pos, cmap=plt.get_cmap('autumn'), node_color=values, node_size = 50)
+        #nx.draw_networkx_labels(self.network, pos, val_map, font_size=3)
+        colorbar = plt.cm.ScalarMappable(cmap=plt.cm.autumn, norm=plt.Normalize(vmin=0, vmax=1))
+        plt.colorbar(colorbar)
+        plt.title('t={}'.format(timestep), fontsize=20)
+        plt.xticks([])
+        plt.yticks([])
+        plt.savefig(f"{episode}snapshot_t={timestep}.png")
+        plt.close()
+
     def one_episode(self, episode, rule):
         ''' run one episode'''
 
@@ -182,7 +228,7 @@ class Simulation:
         # r_range = np.append(n1, n2)
         # r_range = np.append(r8_range, n3)
 
-        r_range = np.arange(0, 0.7, 0.005)
+        r_range = np.arange(0, 1, 0.01)
         for r in r_range:
             fc_converged = self.__play_game(episode, r, rule = rule)
             new_result = pd.DataFrame([[format(r, '.4f'), fc_converged]], columns = ['r', 'fc'])
