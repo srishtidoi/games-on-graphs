@@ -121,7 +121,7 @@ class Simulation:
 
         return fc
 
-    def __play_game(self, episode, r, rule):
+    def __play_game(self, episode, r, rule, output):
         ''' continue game untill fc converges '''
 
         if rule == 'bayesian':
@@ -139,18 +139,22 @@ class Simulation:
         fc_hist = [initial_fc]
         print(f"Episode:{episode}, r:{r:.4f}, Time: 0, fc:{initial_fc:.3f}")
 
-        rep_result = pd.DataFrame({'timestep': [], 'reputation': []})
-        rep_result = self.__take_snapshot(0, episode, rep_result)
-      
+        if output == 'rep':        
+            rep_result = pd.DataFrame({'timestep': [], 'reputation': []})
+            rep_result = self.__take_snapshot(0, episode, rep_result)
+
         for t in range(1, tmax+1):
             self.__count_payoff(r)
             self.__update_strategy(rule = rule) # rule = imitate, bayesian, reputation
             fc = self.__count_fc()
             fc_hist.append(fc)
 
+            
             # take a snapshot every 10th timestep
-            if t%10 == 0:
-                rep_result = self.__take_snapshot(t, episode, rep_result)
+            if output == 'rep':
+                if t%10 == 0:
+                    rep_result = self.__take_snapshot(t, episode, rep_result)
+            
                 
             print(f"Episode:{episode}, r:{r:.4f}, Time:{t}, fc:{fc:.3f}")
 
@@ -171,8 +175,8 @@ class Simulation:
                 break
 
         print(f"r:{r:.4f}, Time:{t}, {comment}:{fc_converged:.3f}")
-
-        rep_result.to_pickle(f"reputation_evol{episode}.pkl")
+        if output == 'rep':
+            rep_result.to_pickle(f"reputation_evol{episode}.pkl")
         
         return fc_converged
 
@@ -187,7 +191,7 @@ class Simulation:
         rep_result = rep_result.append(new_rep_result)
         return rep_result
         
-    def one_episode(self, episode, rule):
+    def one_episode(self, episode, rule, output):
         ''' run one episode'''
 
         result = pd.DataFrame({'r': [], 'fc': []})
@@ -196,10 +200,17 @@ class Simulation:
         if rule == 'imitate' or rule == 'reputation':
             self.__choose_initial_cooperators()
 
-        #r_range = np.arange(0, 0.1, 0.05)
-        r_range = [0.4]
+        ####################################################################
+        
+        if output == 'null': # range of values for regular sim
+            r_range = np.arange(0, 0.5, 0.005)
+        elif output == 'rep': # value of r for sim with rep output
+            r_range = [0.4]
+
+        ####################################################################
+        
         for r in r_range:
-            fc_converged = self.__play_game(episode, r, rule = rule)
+            fc_converged = self.__play_game(episode, r, rule = rule, output=output)
             new_result = pd.DataFrame([[format(r, '.4f'), fc_converged]], columns = ['r', 'fc'])
             result = result.append(new_result)
     
