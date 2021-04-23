@@ -7,14 +7,23 @@ import sys
 import random as rnd
 
 # list of directories with the phase diagrams
-dirs = ['lattice_reputation_n100e100_', 'lattice_reputation_n100e100_p0.7', 'lattice_reputation_n100e100_p0.9']
+dirs = ['scalefree_reputation_n100e100_p0.0','scalefree_reputation_n100e100_p0.1','scalefree_reputation_n100e100_p0.2', 'scalefree_reputation_n100e100_p0.3','scalefree_reputation_n100e100_p0.4', 'scalefree_reputation_n100e100_p0.5', 'scalefree_reputation_n100e100_p0.7']
 
-    #'smallworld_reputation_n100e100_', 'smallworld_reputation_n100e100_p0.7', 'smallworld_reputation_n100e100_p0.9']
+    #'smallworld_reputation_n100e100_p0.0','smallworld_reputation_n100e100_p0.3','smallworld_reputation_n100e100_p0.5', 'smallworld_reputation_n100e100_p0.6','smallworld_reputation_n100e100_p0.7', 'smallworld_reputation_n100e100_p0.9']
 
-    #'scalefree_reputation_n100e100_','scalefree_reputation_n100e100_p0.7','scalefree_reputation_n100e100_p0.8','scalefree_reputation_n100e100_p0.95']
+    #
+
+    #'scalefree_bayesian_n100e20_p0.05','scalefree_bayesian_n100e20_p0.1','scalefree_bayesian_n100e20_p0.2', 'scalefree_bayesian_n100e20_p0.3'] #, 'scalefree_bayesian_n100e20_p0.8']
+
+    #'lattice_reputation_n100e100_', 'lattice_reputation_n100e100_p0.7', 'lattice_reputation_n100e100_p0.9']
+
+    #'smallworld_reputation_n100e100_p0.3','smallworld_reputation_n100e100_p0.5', 'smallworld_reputation_n100e100_p0.6', 'smallworld_reputation_n100e100_p0.7', 'smallworld_reputation_n100e100_p0.8','smallworld_reputation_n100e100_p0.9', 'smallworld_reputation_n100e100_p0.95']
+
+
+    #'scalefree_reputation_n100e100_p0.5','scalefree_reputation_n100e100_p0.7','scalefree_reputation_n100e100_p0.8','scalefree_reputation_n100e100_p0.95']
 
 # list of p values 
-legend = ['p = 0.5', 'p = 0.7', 'p = 0.9']
+legend = ['p = 0', 'p = 0.1', 'p = 0.2', 'p = 0.3', 'p = 0.4', 'p = 0.5', 'p = 0.7']
 
 x_list = []
 fc_list = []
@@ -77,36 +86,42 @@ for d in dirs:
 
     ### fitting
     
-    fit = np.poly1d(np.polyfit(x, fc, 3))      # polynomial fit
+    #fit = np.poly1d(np.polyfit(x, fc, 3))      # polynomial fit
     #model = sm.OLS(fc - 0.5, x).fit()         # linear fit with fixed intercept
-    plt.plot(x, fc, 'k-', linewidth=0.5, alpha=0.7)
+    #plt.plot(x, fc, 'k-', linewidth=0.5, alpha=0.7)
     
     ### if no fit is needed
     
-    #legend_label = legend[dirs.index(d)]      
-    #plt.plot(x, fc, linewidth=1, label=legend_label)
+    legend_label = legend[dirs.index(d)]      
+    plt.plot(x, fc, linewidth=0.7, label=legend_label)
     
     x_list.append(x)
     fc_list.append(fc)
-    fit_list.append(fit)
+    #fit_list.append(fit)
     #model_list.append(model)
     os.chdir('..')
 
 # plotting all the fits 
-for fit in fit_list:
+#for fit in fit_list:
 
     ### legends
     #legend_label = legend[model_list.index(model)]
-    legend_label = legend[fit_list.index(fit)]
+    #legend_label = legend[fit_list.index(fit)]
 
     ### plots
     #plt.plot(fit_x,(0.5+model.predict(fit_x)), label=legend_label)
-    plt.plot(fit_x,fit(fit_x), label=legend_label)
+    #plt.plot(fit_x,fit(fit_x), label=legend_label, linewidth=1)
+
+    #plt.ylabel('Fraction of cooperators')
+    #plt.xlabel('r')
+    #plt.xlim([0,0.5])
+    #plt.ylim([0,1])
     
-    plt.ylabel('Fraction of cooperators')
-    plt.xlabel('r')
-    plt.xlim([0,0.7])
-    plt.ylim([0,1])
+
+plt.ylabel('Fraction of cooperators')
+plt.xlabel('r')
+plt.xlim([0,0.5])
+plt.ylim([0,1])
 
 plt.legend()
 plt.show()
