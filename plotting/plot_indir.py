@@ -2,20 +2,30 @@ import numpy as np
 import matplotlib.pyplot as plt
 import csv
 import os
+import re
 import sys
 import random as rnd
 
+
+
+####
+# the max value of x for fitting and showing
+
+x_max = 0.5
+
+####
+
+
 all_files = os.listdir() # get list of all files in the working directory
-#print(all_files)
 
+files = []
 for f in all_files:
-        if f == "outputs":
-                all_files.remove('outputs')
-        if f == "Figure_1.png":
-                all_files.remove('Figure_1.png')
-
+        text_file = re.search('csv', f)
+        if text_file is not None:
+                files.append(text_file.string)
+        
 n_eps = int(sys.argv[1]) # give the number of eps you want to plot
-files = rnd.sample(all_files, n_eps) # pick n-eps number of eps at random
+files = rnd.sample(files, n_eps) # pick n-eps number of eps at random
 
 # preparing x-values (values of r)
 x = []
@@ -63,7 +73,7 @@ print('fc = ', fc)
 fc = fc/len(files) # taking average over all episodes
 fd = 1 - fc # fraction of defectors
 fit = np.poly1d(np.polyfit(x, fc, 3))
-fit_x = np.linspace(0, 0.5, 100)
+fit_x = np.linspace(0, x_max, 100)
 
 plt.scatter(x, fc, s=3, edgecolors='g', label = 'cooperators')
 plt.plot(fit_x, fit(fit_x), linewidth=1)
@@ -71,7 +81,7 @@ plt.plot(fit_x, fit(fit_x), linewidth=1)
 
 plt.ylabel('Fraction of cooperators')
 plt.xlabel('r')
-plt.xlim([0,0.5])
+plt.xlim([0,x_max])
 plt.ylim([0,1])
 #plt.axis([0, 0.07, 0, 1])
 #plt.xticks([0, 0.01, 0.02, 0.03])
