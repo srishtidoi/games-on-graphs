@@ -6,7 +6,8 @@ class Agent:
     def __init__(self):
         self.point = 0.0    
         self.reputation = 0.05
-        #self.tendency = rnd.random()
+        self.tendency = rnd.random()
+        #self.publicinfo = 0.0
         self.strategy = None
         self.next_strategy = None
         self.strats = []
@@ -61,10 +62,15 @@ class Agent:
             self.next_strategy = self.strats[1]
 
     
-    def __reputation(self, agents, k_r1, k_r2, p): 
+    def __reputation(self, agents, k_r1, k_r2, p, p_info): 
         ''' with fermi-like probability, imitate the neighbour with highest reputation (with probability p)
         or imitate a randomly chosen neighbour (with probability 1-p)'''
 
+        if rnd.random()<p_info:
+            factor = 1+self.tendency
+        else:
+            factor = 1
+                    
         if rnd.random()<p:
             neighbors = [agents[i] for i in self.neighbors_id]
             reps = [opp.reputation for opp in neighbors]
@@ -72,7 +78,7 @@ class Agent:
             max_index = reps.index(max_rep)
             max_opp = neighbors[max_index]
             
-            transition_prob = 1/(1 + np.exp((self.reputation - max_rep)/k_r1)) # transition probability
+            transition_prob = 1/(1 + np.exp((self.reputation - max_rep)*factor/k_r1)) # transition probability
 
             if max_opp.strategy != self.strategy and rnd.random() < transition_prob:
                 self.next_strategy = max_opp.strategy
@@ -82,7 +88,7 @@ class Agent:
         else:
             opp_id = rnd.choice(self.neighbors_id) # choose random opponent from neighbors
             opp = agents[opp_id] # agents = list of all agents
-            transition_prob = 1/(1 + np.exp((self.point - opp.point)/k_r2)) # transition probability
+            transition_prob = 1/(1 + np.exp((self.point - opp.point)/(factor*k_r2))) # transition probability
 
             # Imitate the strategy of a randomly picked neighbor with probablility = transition_prob
             if opp.strategy != self.strategy and rnd.random() < transition_prob:
@@ -105,7 +111,8 @@ class Agent:
         k_r1 = 0.05  # noise paramter for rep-based imitation (rule reputation)
         k_r2 = 1  # noise paramter for payoff-based imitation (rule reputation)
         p_max = 0.1 # max probability difference for rule bayesian
-        p = 0.3     # probability of choosinf rep-based imitation
+        p = 0.5     # probability of choosing rep-based imitation
+        p_info = 0.5 # probability of coming across a piece of public info
 
         #################################################################
 
@@ -114,7 +121,7 @@ class Agent:
         elif rule == "bayesian":
             self.__bayesian(agents, k_by, p_max)
         elif rule == "reputation":
-            self.__reputation(agents, k_r1, k_r2, p)
+            self.__reputation(agents, k_r1, k_r2, p, p_info)
 
     def update_strategy(self):
         self.strategy = self.next_strategy
