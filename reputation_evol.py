@@ -57,5 +57,8 @@ for f in files:
 for i in range(len(y_sum)):
     y_sum[i] = y_sum[i]/len(files)
     plt.plot(max_x, y_sum[i], 'k-', linewidth=0.5, alpha=0.6)
-    
+
+plt.xlabel('Time')
+plt.ylabel('Reputation')
+plt.title('Network: Scalefree')
 plt.show()
