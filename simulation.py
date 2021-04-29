@@ -33,7 +33,7 @@ class Simulation:
             self.network = nx.barabasi_albert_graph(population, average_degree)
 
         agents = [Agent() for id in range(population)]
-            
+                    
 
         if self.network_type == 'lattice': # node id for lattice is of the form (x,y)
             n = int(np.sqrt(population))
@@ -72,7 +72,7 @@ class Simulation:
             agent.reputation = 0.05 # initial reputation for reputation rule
             agent.strats = ['C', 'D']
             agent.stratpoints = [0.5, 0.5] # initial points for bayesian rule
-
+            
         if rule == 'imitate' or rule == 'reputation':
             for index, focal in enumerate(self.agents):
                 if index in self.initial_cooperators:
@@ -80,7 +80,7 @@ class Simulation:
                 else :
                     focal.strategy = 'D' # Defectors
 
-        elif rule == 'bayesian':
+        elif rule == 'bayesian' or rule == 'bayesian2':
             for focal in self.agents:
                 focal.strategy = rnd.choice(focal.strats)
                 
@@ -103,15 +103,15 @@ class Simulation:
                 elif focal.strategy == "D" and neighbor.strategy == "D":  
                     focal.point += P
 
-    def __update_strategy(self, rule):
+    def __update_strategy(self, rule, fc):
         if rule == 'imitate' or rule == 'reputation':
             focal = rnd.choice(self.agents)
-            focal.decide_next_strategy(self.agents, rule = rule)
+            focal.decide_next_strategy(self.agents, rule = rule, fc=fc)
             focal.update_strategy()
-
-        if rule == 'bayesian':
+                       
+        if rule == 'bayesian' or rule == 'bayesian2':
             for focal in self.agents:
-                focal.decide_next_strategy(self.agents, rule = rule)
+                focal.decide_next_strategy(self.agents, rule = rule, fc=fc)
                 focal.update_strategy()
 
     def __count_fc(self):
@@ -124,7 +124,7 @@ class Simulation:
     def __play_game(self, episode, r, rule, output):
         ''' continue game untill fc converges '''
 
-        if rule == 'bayesian':
+        if rule == 'bayesian' or rule == 'bayesian2':
             tmax = 1000000
             tc = 10000 # t after which convergence condition is checked
             tavg = 100 # t over which avg is taken to check convergence
@@ -143,13 +143,15 @@ class Simulation:
             rep_result = pd.DataFrame({'timestep': [], 'reputation': []})
             rep_result = self.__take_snapshot(0, episode, rep_result)
 
+        fc = initial_fc
+        print(fc)
         for t in range(1, tmax+1):
             self.__count_payoff(r)
-            self.__update_strategy(rule = rule) # rule = imitate, bayesian, reputation
+            self.__update_strategy(rule = rule, fc=fc) # rule = imitate, bayesian, reputation
+            
             fc = self.__count_fc()
             fc_hist.append(fc)
-
-            
+                        
             # take a snapshot every 10th timestep
             if output == 'rep':
                 if t%10 == 0:

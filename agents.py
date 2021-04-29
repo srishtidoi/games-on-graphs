@@ -7,7 +7,7 @@ class Agent:
         self.point = 0.0    
         self.reputation = 0.05
         self.tendency = rnd.random()
-        #self.publicinfo = 0.0
+        self.threshold = rnd.random()
         self.strategy = None
         self.next_strategy = None
         self.strats = []
@@ -61,6 +61,62 @@ class Agent:
         else:
             self.next_strategy = self.strats[1]
 
+    def __bayesian2(self, agents, k_b2, p_fc, fc):
+
+        if rnd.random()<p_fc:
+            coop_id = self.strats.index("C")
+            defec_id = self.strats.index("D")
+
+            factor = fc - self.threshold
+
+            if factor < 0:
+                factor = 0
+                
+            # update probabiities of all strats
+            self.stratpoints[coop_id] = self.stratpoints[coop_id]*((2 - self.stratpoints[coop_id])**factor)
+            self.stratpoints[defec_id] = 1 - self.stratpoints[coop_id]        
+
+            if rnd.random()<self.stratpoints[coop_id]:
+                self.next_strategy = "C"
+            else:
+                self.next_strategy = "D"
+
+        else:
+            avg_opp = 0 # average payoff of all nrighbours
+            number_opps = len(self.neighbors_id) # number of neighbors
+            
+            # current strat and other strat id
+            current_strat_id = self.strats.index(self.strategy) 
+            other_strat = [x for x in self.strats if x != self.strategy] 
+            other_strat_id = self.strats.index(other_strat[0]) 
+                        
+            for agent_id in self.neighbors_id: # iterate over all neighbors
+                opp = agents[agent_id]
+                avg_opp += opp.point
+
+            avg_opp = avg_opp/number_opps
+            #print(avg_opp)
+            #print(self.point)
+            diff = self.point - avg_opp
+            #print(diff)
+            if diff < 0:
+                diff = 0
+
+            factor = -0.2 + (0.4/(1 + np.exp(-diff/k_b2)))
+            #print(factor)
+
+            current = self.stratpoints[current_strat_id]
+            
+            # update probabiities of all strats
+            current = current*((2 - current)**factor)
+            self.stratpoints[other_strat_id] = 1 - current
+            self.stratpoints[current_strat_id] = current
+            
+            if rnd.random()<self.stratpoints[0]:
+                self.next_strategy = self.strats[0]
+            else:
+                self.next_strategy = self.strats[1]
+        
     
     def __reputation(self, agents, k_r1, k_r2, p, p_info): 
         ''' with fermi-like probability, imitate the neighbour with highest reputation (with probability p)
@@ -101,18 +157,23 @@ class Agent:
                 self.reputation = (self.reputation)*(2 - self.reputation)
                 
         
-    def decide_next_strategy(self, agents, rule):
+    def decide_next_strategy(self, agents, rule, fc):
         ''' rule = learning rule (imitate, bayesian) '''
 
         #################################################################
         
         k_im = 0.1  # noise value for rule imitate
+
         k_by = 1.5  # noise parameter for rule bayesian
-        k_r1 = 0.05  # noise paramter for rep-based imitation (rule reputation)
-        k_r2 = 1  # noise paramter for payoff-based imitation (rule reputation)
         p_max = 0.1 # max probability difference for rule bayesian
-        p = 0.5     # probability of choosing rep-based imitation
-        p_info = 0.5 # probability of coming across a piece of public info
+        
+        k_r1 = 0.05  # noise paramter for rep-based imitation (rule reputation)
+        k_r2 = 0.1  # noise paramter for payoff-based imitation (rule reputation)
+        p = 0.3     # probability of choosing rep-based imitation
+        p_info = 0.9 # probability of coming across a piece of public info
+
+        k_b2 = 1.5 # noise parameter for factor (rule bayesian2)
+        p_fc = 0.0   # probability of know total fc
 
         #################################################################
 
@@ -122,6 +183,8 @@ class Agent:
             self.__bayesian(agents, k_by, p_max)
         elif rule == "reputation":
             self.__reputation(agents, k_r1, k_r2, p, p_info)
+        elif rule == "bayesian2":
+            self.__bayesian2(agents, k_b2, p_fc, fc)
 
     def update_strategy(self):
         self.strategy = self.next_strategy
