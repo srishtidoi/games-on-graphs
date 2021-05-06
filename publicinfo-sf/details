@@ -1,0 +1,9 @@
+All the sims in this folder have the following params:
+
+network = scalefree
+model = repuatation
+p (prob of choosing reputation based imitation) = 0.3
+population = 100
+number of runs = 100
+
+I am trying to find the best way increase cooperation using the availability of public info
