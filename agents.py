@@ -6,7 +6,7 @@ class Agent:
     def __init__(self):
         self.point = 0.0    
         self.reputation = 0.05
-        self.tendency = rnd.random()
+        self.tendency = 0.5
         self.threshold = rnd.random()
         self.strategy = None
         self.next_strategy = None
@@ -122,18 +122,25 @@ class Agent:
         ''' with fermi-like probability, imitate the neighbour with highest reputation (with probability p)
         or imitate a randomly chosen neighbour (with probability 1-p)'''
 
-        if rnd.random()<p_info:
-            factor = 1+self.tendency
-        else:
-            factor = 1
-                    
+        #if rnd.random()<p_info:
+         #   factor = 1+self.tendency
+        #else:
+         #   factor = 1
+        
         if rnd.random()<p:
+            
+           # if rnd.random()<p_info:
+            factor = 1+self.tendency
+            #else:
+             #   factor = 1
+                
             neighbors = [agents[i] for i in self.neighbors_id]
             reps = [opp.reputation for opp in neighbors]
             max_rep = max(reps)
             max_index = reps.index(max_rep)
             max_opp = neighbors[max_index]
-            
+
+
             transition_prob = 1/(1 + np.exp((self.reputation - max_rep)*factor/k_r1)) # transition probability
 
             if max_opp.strategy != self.strategy and rnd.random() < transition_prob:
@@ -144,7 +151,7 @@ class Agent:
         else:
             opp_id = rnd.choice(self.neighbors_id) # choose random opponent from neighbors
             opp = agents[opp_id] # agents = list of all agents
-            transition_prob = 1/(1 + np.exp((self.point - opp.point)/(factor*k_r2))) # transition probability
+            transition_prob = 1/(1 + np.exp((self.point - opp.point)/(k_r2))) # transition probability
 
             # Imitate the strategy of a randomly picked neighbor with probablility = transition_prob
             if opp.strategy != self.strategy and rnd.random() < transition_prob:
@@ -170,7 +177,7 @@ class Agent:
         k_r1 = 0.05  # noise paramter for rep-based imitation (rule reputation)
         k_r2 = 0.1  # noise paramter for payoff-based imitation (rule reputation)
         p = 0.3     # probability of choosing rep-based imitation
-        p_info = 0.9 # probability of coming across a piece of public info
+        p_info = 1.0 # probability of coming across a piece of public info
 
         k_b2 = 1.5 # noise parameter for factor (rule bayesian2)
         p_fc = 0.0   # probability of know total fc
