@@ -187,8 +187,9 @@ class Simulation:
         val_map = {}
         for index, focal in enumerate(self.agents):
             val_map[index] = focal.reputation
-        
-        values = [val_map.get(node) for node in self.network.nodes()]
+
+        values = list(val_map.values())
+        #values = [val_map.get(node) for node in self.network.nodes()]
         new_rep_result = pd.DataFrame([[timestep, values]], columns = ['timestep', 'reputation'])
         rep_result = rep_result.append(new_rep_result)
         return rep_result
