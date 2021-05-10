@@ -7,23 +7,13 @@ import sys
 import random as rnd
 
 # list of directories with the phase diagrams
-dirs = ['scalefree_reputation_n100e100_p0.0','scalefree_reputation_n100e100_p0.1','scalefree_reputation_n100e100_p0.2', 'scalefree_reputation_n100e100_p0.3','scalefree_reputation_n100e100_p0.4', 'scalefree_reputation_n100e100_p0.5', 'scalefree_reputation_n100e100_p0.7']
+dirs = ['lattice_reputation_n100e100_p0.5_0.3_onlyrep', 'lattice_reputation_n100e100_p0.5_0.5_onlyrep', 'lattice_reputation_n100e100_p0.5_0.7_onlyrep']
+    #'pi0.0','pi0.5','pi0.5_onlyrep','pi0.5_onlyrep_tend0.5','pi0.5_tend0.5','pi0.7','pi0.9','pi1.0','pi1.0_tend0.5']
 
-    #'smallworld_reputation_n100e100_p0.0','smallworld_reputation_n100e100_p0.3','smallworld_reputation_n100e100_p0.5', 'smallworld_reputation_n100e100_p0.6','smallworld_reputation_n100e100_p0.7', 'smallworld_reputation_n100e100_p0.9']
-
-    #
-
-    #'scalefree_bayesian_n100e20_p0.05','scalefree_bayesian_n100e20_p0.1','scalefree_bayesian_n100e20_p0.2', 'scalefree_bayesian_n100e20_p0.3'] #, 'scalefree_bayesian_n100e20_p0.8']
-
-    #'lattice_reputation_n100e100_', 'lattice_reputation_n100e100_p0.7', 'lattice_reputation_n100e100_p0.9']
-
-    #'smallworld_reputation_n100e100_p0.3','smallworld_reputation_n100e100_p0.5', 'smallworld_reputation_n100e100_p0.6', 'smallworld_reputation_n100e100_p0.7', 'smallworld_reputation_n100e100_p0.8','smallworld_reputation_n100e100_p0.9', 'smallworld_reputation_n100e100_p0.95']
-
-
-    #'scalefree_reputation_n100e100_p0.5','scalefree_reputation_n100e100_p0.7','scalefree_reputation_n100e100_p0.8','scalefree_reputation_n100e100_p0.95']
-
-# list of p values 
-legend = ['p = 0', 'p = 0.1', 'p = 0.2', 'p = 0.3', 'p = 0.4', 'p = 0.5', 'p = 0.7']
+    # list of p values
+legend = ['p_info = 0.3','p_info = 0.5', 'p_info = 0.7', 'fr-threshold']
+    #'$p=0.0$','$p=0.5$','$p=0.5$ (info only for rep)','$p=0.5$ (info only for rep, constant tendency = 0.5)','$p=0.5$ (contant tendency = 0.5)', '$p=0.7$', '$p=0.9$','$p=1.0$','$p=1.0$ (constant value of tendency = 0.5)']
+    #'$p=0.7, p_{info}=0.0$','$p=0.7, p_{info}=0.3$','$p=0.7, p_{info}=0.5$','$p=0.7, p_{info}=0.7$']
 
 x_list = []
 fc_list = []
@@ -118,6 +108,7 @@ for d in dirs:
     #plt.ylim([0,1])
     
 
+plt.title('Model: Reputation, Network: Scalefree')
 plt.ylabel('Fraction of cooperators')
 plt.xlabel('r')
 plt.xlim([0,0.5])

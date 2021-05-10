@@ -1,9 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-x1 = np.linspace(-10,0,100)
+x1 = np.linspace(-10,10,1000)
 x2 = np.linspace(0,10,100)
-y = []
+
 
 # for i in [0.1, 0.2, 0.3, 0.4]:
 #     y_temp = -i + 2*i/(1 + np.exp(-x/1.5))
@@ -26,26 +26,22 @@ y = []
 # plt.legend()
 # plt.show()
 
-for i in [1.5]: 
-    y_temp = -0.2 + 0.4/(1 + np.exp(-x2/i))
-    y.append(y_temp)
+y = 1/(1 + np.exp(-x1/0.25))
 
-y0 = np.zeros(100)
-y.append(y0)
 
-plt.xlim([-5,10])
-plt.ylim([-0.1,0.4])
+plt.xlim([-1,1])
+plt.ylim([-0.1,1.1])
 plt.grid(True)
 plt.axhline(y=0, color='k')
 plt.axvline(x=0, color='k')
-plt.ylabel('factor')
-plt.xlabel('$P_{self} - P^{avg}_{nbrs}$')
+plt.ylabel('Transition Probability')
+plt.xlabel('$Reputation_{self}$')
 #plt.title('$\Delta Reputation$ x (1 + tendency)')
 
 #label1 = 'value without PI'
 #label2 = 'value with PI'
-plt.plot(x2,y[0], 'r-') #, label=label1)
-plt.plot(x1, y[1], 'r-') #, label=label2)
+#plt.plot(x2,y[0], 'r-') #, label=label1)
+plt.plot(x1, y, 'r-') #, label=label2)
 
 
 #plt.legend()
