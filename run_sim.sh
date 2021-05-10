@@ -7,9 +7,9 @@
 #### rule: learning rule - imitate, bayesian, reputation
 #### out: kind of output - null, rep (for time evolution of reputation parameter) 
 
-note=test
+note=p0.3_0.7_fr
 population=100
-eps=2
+eps=100
 network=scalefree
 rule=reputation
 out=null

@@ -48,6 +48,7 @@ for f in files:
 
         y = np.array(y_list)
         
+        
         if ind == 0:
             y_sum.append(y)
         else:
@@ -60,5 +61,5 @@ for i in range(len(y_sum)):
 
 plt.xlabel('Time')
 plt.ylabel('Reputation')
-plt.title('Network: Scalefree')
+plt.title('Network: Lattice')
 plt.show()
