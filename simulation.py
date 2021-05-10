@@ -103,15 +103,15 @@ class Simulation:
                 elif focal.strategy == "D" and neighbor.strategy == "D":  
                     focal.point += P
 
-    def __update_strategy(self, rule, fc):
+    def __update_strategy(self, rule, fc, fr):
         if rule == 'imitate' or rule == 'reputation':
             focal = rnd.choice(self.agents)
-            focal.decide_next_strategy(self.agents, rule = rule, fc=fc)
+            focal.decide_next_strategy(self.agents, rule = rule, fc=fc, fr=fr)
             focal.update_strategy()
                        
         if rule == 'bayesian' or rule == 'bayesian2':
             for focal in self.agents:
-                focal.decide_next_strategy(self.agents, rule = rule, fc=fc)
+                focal.decide_next_strategy(self.agents, rule = rule, fc=fc, fr=fr)
                 focal.update_strategy()
 
     def __count_fc(self):
@@ -120,6 +120,15 @@ class Simulation:
         fc = len([agent for agent in self.agents if agent.strategy == 'C'])/len(self.agents)
 
         return fc
+
+    def __count_fr(self):
+        ''' calculate the fraction of agents that have reputation above 0.9'''
+
+        reps = [focal.reputation for focal in self.agents]
+        bigreps = [x for x in reps if x>0.9]
+        fr = len(bigreps)/len(reps)
+
+        return fr
 
     def __play_game(self, episode, r, rule, output):
         ''' continue game untill fc converges '''
@@ -144,10 +153,11 @@ class Simulation:
             rep_result = self.__take_snapshot(0, episode, rep_result)
 
         fc = initial_fc
-        print(fc)
+        #print(fc)
         for t in range(1, tmax+1):
             self.__count_payoff(r)
-            self.__update_strategy(rule = rule, fc=fc) # rule = imitate, bayesian, reputation
+            fr = self.__count_fr()
+            self.__update_strategy(rule = rule, fc=fc, fr=fr) # rule = imitate, bayesian, reputation
             
             fc = self.__count_fc()
             fc_hist.append(fc)
