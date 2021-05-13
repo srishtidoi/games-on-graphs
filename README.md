@@ -1,2 +1,2 @@
 # Games on Graphs
-Simulating regular and voluntary prisoner's dilemma on different network topologies 
+Simulating prisoner's dilemma on different network topologies and creating models with (public) information asymmetry in order to promote cooperation among agents.
