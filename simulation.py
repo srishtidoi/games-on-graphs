@@ -84,24 +84,55 @@ class Simulation:
             for focal in self.agents:
                 focal.strategy = rnd.choice(focal.strats)
                 
-    def __count_payoff(self, r):
-        R = 1     # Reward
-        S = -r    # Sucker
-        T = 1+r   # Temptation
-        P = 0     # Punishment
+    def __count_payoff(self, r, game):
 
-        for focal in self.agents:
-            focal.point = 0.0
-            for nb_id in focal.neighbors_id:
-                neighbor = self.agents[nb_id]
-                if focal.strategy == 'C' and neighbor.strategy == 'C':
-                    focal.point += R
-                elif focal.strategy == "C" and neighbor.strategy == "D":   
-                    focal.point += S
-                elif focal.strategy == "D" and neighbor.strategy == "C":   
-                    focal.point += T
-                elif focal.strategy == "D" and neighbor.strategy == "D":  
-                    focal.point += P
+        if game=="PD":
+            R = 1     # Reward
+            S = -r    # Sucker
+            T = 1+r   # Temptation
+            P = 0     # Punishment
+
+            for focal in self.agents:
+                focal.point = 0.0
+                for nb_id in focal.neighbors_id:
+                    neighbor = self.agents[nb_id]
+                    if focal.strategy == 'C' and neighbor.strategy == 'C':
+                        focal.point += R
+                    elif focal.strategy == "C" and neighbor.strategy == "D":   
+                        focal.point += S
+                    elif focal.strategy == "D" and neighbor.strategy == "C":   
+                        focal.point += T
+                    elif focal.strategy == "D" and neighbor.strategy == "D":  
+                        focal.point += P
+
+        if game=="PGD":
+            # resetting all points to 0
+            for focal in self.agents:
+                focal.point = 0.0
+
+            for focal in self.agents:
+                N = len(focal.neighbors_id)
+                cooperators = []
+                defectors = []
+
+                # iterating over all neighbours and classifying them as C or D
+                for nb_id in focal.neighbors_id:
+                    neighbor = self.agents[nb_id]
+                    if neighbor.strategy == "C":
+                        cooperators.append(neighbor)
+                    else:
+                        defectors.append(neighbor)
+                # classifying focal as C or D
+                if focal.strategy == "C":
+                    cooperators.append(focal)
+                else:
+                    defectors.append(focal)
+
+                # adding payoffs to pre-existing points
+                for agent in cooperators:
+                    agent.point += (len(cooperators)*r/N+1) - 1
+                for agent in defectors:
+                    agent.point += (len(cooperators)*r/N+1)
 
     def __update_strategy(self, rule, fc, fr):
         if rule == 'imitate' or rule == 'reputation':
@@ -155,7 +186,7 @@ class Simulation:
         fc = initial_fc
         #print(fc)
         for t in range(1, tmax+1):
-            self.__count_payoff(r)
+            self.__count_payoff(r, game="PD")
             fr = self.__count_fr()
             self.__update_strategy(rule = rule, fc=fc, fr=fr) # rule = imitate, bayesian, reputation
             
@@ -216,7 +247,7 @@ class Simulation:
         ####################################################################
         
         if output == 'null': # range of values for regular sim
-            r_range = np.arange(0, 0.5, 0.005)
+            r_range = np.arange(0, 0.5, 0.01)
         elif output == 'rep': # value of r for sim with rep output
             r_range = [0.4]
 
