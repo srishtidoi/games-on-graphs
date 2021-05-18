@@ -5,7 +5,7 @@ class Agent:
 
     def __init__(self):
         self.point = 0.0    
-        self.reputation = 0.05
+        self.reputation = 0.0
         self.tendency = rnd.random()
         self.threshold = rnd.random()
         self.strategy = None
@@ -118,7 +118,7 @@ class Agent:
                 self.next_strategy = self.strats[1]
         
     
-    def __reputation(self, agents, k_r1, k_r2, p, p_info, fr): 
+    def __reputation(self, agents, k_r1, k_r2, p, p_c, fr): 
         ''' with fermi-like probability, imitate the neighbour with highest reputation (with probability p)
         or imitate a randomly chosen neighbour (with probability 1-p)'''
 
@@ -128,35 +128,85 @@ class Agent:
          #   factor = 1
         
         if rnd.random()<p:
-            
-            #if rnd.random()<p_info:
-             #   factor = 1+self.tendency
-            #else:
-             #   factor = 1
+            if rnd.random()<p_c:
+                fr = fr[0]
+                if abs(fr) > self.tendency:
+                    transition_prob = 1/(1 + np.exp(-abs(self.tendency)/0.25))
 
-            if fr > self.tendency:
-                transition_prob = 1/(1 + np.exp(-self.reputation/0.25))
-
-                if rnd.random()<transition_prob:
-                    self.next_strategy = "C"
-                else:
-                    self.next_strategy = "D"
+                    if rnd.random()<transition_prob:
+                        #if self.reputation>0:
+                        self.next_strategy = "C" 
+                        #else:
+                        #   self.next_strategy = "D"
+                    else:
+                        self.next_strategy = self.strategy
                     
-            else:
-                neighbors = [agents[i] for i in self.neighbors_id]
-                reps = [opp.reputation for opp in neighbors]
-                max_rep = max(reps)
-                max_index = reps.index(max_rep)
-                max_opp = neighbors[max_index]
+                else:
+                    neighbors = [agents[i] for i in self.neighbors_id]
+                    reps = [abs(opp.reputation) for opp in neighbors]
+                    max_rep = max(reps)
+                    max_index = reps.index(max_rep)
+                    max_opp = neighbors[max_index]
 
             
-                diff = self.reputation - max_rep    
-                transition_prob = 1/(1 + np.exp(diff/k_r1)) # transition probability
+                    #diff = self.reputation - max_rep    
+                    #transition_prob = 1/(1 + np.exp(diff/k_r1)) # transition probability
+                    s = self.reputation
+                    o = max_opp.reputation
+                    if s != 0:
+                        x = np.sign(s*o)*abs(o/s)
+                    
+                        if x>=0:
+                            transition_prob = 1/(1 + np.exp((0.5-x)/0.1))
+                        else:
+                            transition_prob = 0.9/(1 + np.exp(x+5))
+                
+                        if max_opp.strategy != self.strategy and rnd.random() < transition_prob:
+                            self.next_strategy = max_opp.strategy
+                        else:
+                            self.next_strategy = self.strategy
+                    else:
+                        self.next_strategy = max_opp.strategy
 
-                if max_opp.strategy != self.strategy and rnd.random() < transition_prob:
-                    self.next_strategy = max_opp.strategy
+            else:
+                fr = fr[1]
+                if abs(fr) > self.tendency:
+                    transition_prob = 1/(1 + np.exp(-abs(self.tendency)/0.25))
+
+                    if rnd.random()<transition_prob:
+                        #if self.reputation>0:
+                        self.next_strategy = "D" 
+                        #else:
+                        #   self.next_strategy = "D"
+                    else:
+                        self.next_strategy = self.strategy
+                    
                 else:
-                    self.next_strategy = self.strategy
+                    neighbors = [agents[i] for i in self.neighbors_id]
+                    reps = [abs(opp.reputation) for opp in neighbors]
+                    max_rep = max(reps)
+                    max_index = reps.index(max_rep)
+                    max_opp = neighbors[max_index]
+
+            
+                    #diff = self.reputation - max_rep    
+                    #transition_prob = 1/(1 + np.exp(diff/k_r1)) # transition probability
+                    s = self.reputation
+                    o = max_opp.reputation
+                    if s != 0:
+                        x = np.sign(s*o)*abs(o/s)
+                    
+                        if x>=0:
+                            transition_prob = 1/(1 + np.exp((0.5-x)/0.1))
+                        else:
+                            transition_prob = 0.9/(1 + np.exp(x+5))
+                
+                        if max_opp.strategy != self.strategy and rnd.random() < transition_prob:
+                            self.next_strategy = max_opp.strategy
+                        else:
+                            self.next_strategy = self.strategy
+                    else:
+                        self.next_strategy = max_opp.strategy
 
         else:
             opp_id = rnd.choice(self.neighbors_id) # choose random opponent from neighbors
@@ -170,11 +220,18 @@ class Agent:
                 self.next_strategy = self.strategy
 
                 
-        if self.next_strategy == 'C':
-                self.reputation = (self.reputation)*(2 - self.reputation)
+        if self.reputation>0 and self.next_strategy == 'C':
+            self.reputation = -0.9311 + 2/(1+np.exp(-self.reputation/0.3))
+        elif self.reputation<0 and self.next_strategy == 'D':
+            self.reputation = 0.9311 - 2/(1+np.exp(self.reputation/0.3))
+        elif self.reputation == 0.0:
+            if self.next_strategy == "C":
+                self.reputation = 0.069
+            else:
+                self.reputation = -0.069
                 
         
-    def decide_next_strategy(self, agents, rule, fc, fr):
+    def decide_next_strategy(self, agents, rule, fc, fr, p_c):
         ''' rule = learning rule (imitate, bayesian) '''
 
         #################################################################
@@ -186,8 +243,8 @@ class Agent:
         
         k_r1 = 0.05  # noise paramter for rep-based imitation (rule reputation)
         k_r2 = 0.1  # noise paramter for payoff-based imitation (rule reputation)
-        p = 0.3     # probability of choosing rep-based imitation
-        p_info = 0.7 # probability of coming across a piece of public info
+        p = 0.5     # probability of choosing rep-based imitation
+        #p_info = 0.7 # probability of coming across a piece of public info
 
         k_b2 = 1.5 # noise parameter for factor (rule bayesian2)
         p_fc = 0.0   # probability of know total fc
@@ -199,7 +256,7 @@ class Agent:
         elif rule == "bayesian":
             self.__bayesian(agents, k_by, p_max)
         elif rule == "reputation":
-            self.__reputation(agents, k_r1, k_r2, p, p_info, fr)
+            self.__reputation(agents, k_r1, k_r2, p, 0.5, fr)
         elif rule == "bayesian2":
             self.__bayesian2(agents, k_b2, p_fc, fc)
 

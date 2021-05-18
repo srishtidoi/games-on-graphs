@@ -69,7 +69,7 @@ class Simulation:
 
         # define strategies for each agent (used for bayesian)
         for agent in self.agents:
-            agent.reputation = 0.05 # initial reputation for reputation rule
+            agent.reputation = 0.0 # initial reputation for reputation rule
             agent.strats = ['C', 'D']
             agent.stratpoints = [0.5, 0.5] # initial points for bayesian rule
             
@@ -105,6 +105,16 @@ class Simulation:
                     elif focal.strategy == "D" and neighbor.strategy == "D":  
                         focal.point += P
 
+        if game=="OPDYN":
+            for focal in self.agents:
+                focal.point = 0.0
+                for nb_id in focal.neighbors_id:
+                    neighbor = self.agents[nb_id]
+                    if focal.strategy == neighbor.strategy:
+                        focal.point += 1
+                    else:
+                        focal.point += -r
+
         if game=="PGD":
             # resetting all points to 0
             for focal in self.agents:
@@ -134,15 +144,15 @@ class Simulation:
                 for agent in defectors:
                     agent.point += (len(cooperators)*r/N+1)
 
-    def __update_strategy(self, rule, fc, fr):
+    def __update_strategy(self, rule, fc, fr, p_c):
         if rule == 'imitate' or rule == 'reputation':
             focal = rnd.choice(self.agents)
-            focal.decide_next_strategy(self.agents, rule = rule, fc=fc, fr=fr)
+            focal.decide_next_strategy(self.agents, rule = rule, fc=fc, fr=fr, p_c = p_c)
             focal.update_strategy()
                        
         if rule == 'bayesian' or rule == 'bayesian2':
             for focal in self.agents:
-                focal.decide_next_strategy(self.agents, rule = rule, fc=fc, fr=fr)
+                focal.decide_next_strategy(self.agents, rule = rule, fc=fc, fr=fr, p_c=p_c)
                 focal.update_strategy()
 
     def __count_fc(self):
@@ -152,12 +162,20 @@ class Simulation:
 
         return fc
 
-    def __count_fr(self):
+    def __count_fr(self, game):
         ''' calculate the fraction of agents that have reputation above 0.9'''
 
-        reps = [focal.reputation for focal in self.agents]
-        bigreps = [x for x in reps if x>0.9]
-        fr = len(bigreps)/len(reps)
+        if game=="PD" or game=="PGD":
+            reps = [focal.reputation for focal in self.agents]
+            bigreps = [x for x in reps if x>0.9]
+            fr = len(bigreps)/len(reps)
+        elif game=="OPDYN":
+            reps = [focal.reputation for focal in self.agents]
+            bigreps_p = [x for x in reps if x>0.9]
+            bigreps_n = [x for x in reps if x<-0.9]
+            frp = len(bigreps_p)/len(reps)
+            frn = len(bigreps_n)/len(reps)
+            fr = [frp, frn]
 
         return fr
 
@@ -186,9 +204,9 @@ class Simulation:
         fc = initial_fc
         #print(fc)
         for t in range(1, tmax+1):
-            self.__count_payoff(r, game="PD")
-            fr = self.__count_fr()
-            self.__update_strategy(rule = rule, fc=fc, fr=fr) # rule = imitate, bayesian, reputation
+            self.__count_payoff(1, game="OPDYN")
+            fr = self.__count_fr(game="OPDYN")
+            self.__update_strategy(rule = rule, fc=fc, fr=fr, p_c=r) # rule = imitate, bayesian, reputation
             
             fc = self.__count_fc()
             fc_hist.append(fc)
@@ -247,9 +265,9 @@ class Simulation:
         ####################################################################
         
         if output == 'null': # range of values for regular sim
-            r_range = np.arange(0, 0.5, 0.01)
+            r_range = np.arange(0, 1, 0.01)
         elif output == 'rep': # value of r for sim with rep output
-            r_range = [0.4]
+            r_range = [0.9]
 
         ####################################################################
         
