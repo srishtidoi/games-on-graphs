@@ -61,5 +61,6 @@ for i in range(len(y_sum)):
 
 plt.xlabel('Time')
 plt.ylabel('Reputation')
-plt.title('Network: Lattice')
+plt.title('Network: Scalefree')
+plt.xscale('log')
 plt.show()
