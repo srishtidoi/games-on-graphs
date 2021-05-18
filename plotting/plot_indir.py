@@ -11,7 +11,7 @@ import random as rnd
 ####
 # the max value of x for fitting and showing
 
-x_max = 0.5
+x_max = 1
 
 ####
 
@@ -82,7 +82,7 @@ plt.plot(fit_x, fit(fit_x), linewidth=1)
 plt.ylabel('Fraction of cooperators')
 plt.xlabel('r')
 plt.xlim([0,x_max])
-plt.ylim([0,1])
+plt.ylim([-0.1,1.1])
 #plt.axis([0, 0.07, 0, 1])
 #plt.xticks([0, 0.01, 0.02, 0.03])
 #plt.legend()
