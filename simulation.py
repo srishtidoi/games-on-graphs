@@ -200,7 +200,8 @@ class Simulation:
         if output == 'rep':        
             rep_result = pd.DataFrame({'timestep': [], 'reputation': []})
             rep_result = self.__take_snapshot(0, episode, rep_result)
-
+            timeseries = pd.DataFrame({'r': [], 't': [], 'fc': []})
+        
         fc = initial_fc
         #print(fc)
         for t in range(1, tmax+1):
@@ -215,6 +216,8 @@ class Simulation:
             if output == 'rep':
                 if t%10 == 0:
                     rep_result = self.__take_snapshot(t, episode, rep_result)
+                new_time = pd.DataFrame([[format(r, '.4f'), t, fc]], columns = ['r', 't', 'fc'])
+                timeseries = timeseries.append(new_time)
             
                 
             print(f"Episode:{episode}, r:{r:.4f}, Time:{t}, fc:{fc:.3f}")
@@ -238,6 +241,7 @@ class Simulation:
         print(f"r:{r:.4f}, Time:{t}, {comment}:{fc_converged:.3f}")
         if output == 'rep':
             rep_result.to_pickle(f"reputation_evol{episode}.pkl")
+            timeseries.to_csv(f"timeseries{episode}.csv")
         
         return fc_converged
 
