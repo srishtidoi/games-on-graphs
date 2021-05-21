@@ -1,0 +1,2 @@
+new funciton for to decrease the number of steps required to reach max rep
+favours C in that it switched strategy to C if fr is greater than tendency (both C and D)
