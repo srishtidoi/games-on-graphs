@@ -3,15 +3,16 @@ import matplotlib.pyplot as plt
 import statsmodels.api as sm
 import csv
 import os
+import re
 import sys
 import random as rnd
 
 # list of directories with the phase diagrams
-dirs = ['lattice_reputation_n100e100_p0.5_0.3_onlyrep', 'lattice_reputation_n100e100_p0.5_0.5_onlyrep', 'lattice_reputation_n100e100_p0.5_0.7_onlyrep']
+dirs = ['scalefree_reputation_n100e100_p0.3', 'scalefree_reputation_n100e100_fr_p0.3']
     #'pi0.0','pi0.5','pi0.5_onlyrep','pi0.5_onlyrep_tend0.5','pi0.5_tend0.5','pi0.7','pi0.9','pi1.0','pi1.0_tend0.5']
 
     # list of p values
-legend = ['p_info = 0.3','p_info = 0.5', 'p_info = 0.7', 'fr-threshold']
+legend = ['without $f_{R}$', 'with $f_{R}$']
     #'$p=0.0$','$p=0.5$','$p=0.5$ (info only for rep)','$p=0.5$ (info only for rep, constant tendency = 0.5)','$p=0.5$ (contant tendency = 0.5)', '$p=0.7$', '$p=0.9$','$p=1.0$','$p=1.0$ (constant value of tendency = 0.5)']
     #'$p=0.7, p_{info}=0.0$','$p=0.7, p_{info}=0.3$','$p=0.7, p_{info}=0.5$','$p=0.7, p_{info}=0.7$']
 
@@ -25,9 +26,14 @@ fit_x = np.linspace(0, 1, 100)
 
 for d in dirs:
     os.chdir(d)
-    files = os.listdir() # get list of all files in the working directory
+    all_files = os.listdir() # get list of all files in the working directory
+    files = []
     #print(all_files)
-    files.remove('outputs')
+    for f in all_files:
+        text_file = re.search('csv', f)
+        if text_file is not None:
+                files.append(text_file.string)
+    #files.remove('outputs')
         
     # preparing x-values (values of r)
     x = []
@@ -75,15 +81,15 @@ for d in dirs:
 
 
     ### fitting
-    
-    #fit = np.poly1d(np.polyfit(x, fc, 3))      # polynomial fit
+    #pfit = np.polyfit(x, fc, 2)
+    #fit = np.poly1d(pfit)      # polynomial fit
     #model = sm.OLS(fc - 0.5, x).fit()         # linear fit with fixed intercept
     #plt.plot(x, fc, 'k-', linewidth=0.5, alpha=0.7)
     
     ### if no fit is needed
     
     legend_label = legend[dirs.index(d)]      
-    plt.plot(x, fc, linewidth=0.7, label=legend_label)
+    plt.plot(x, fc, linewidth=1, label=legend_label)
     
     x_list.append(x)
     fc_list.append(fc)
@@ -97,22 +103,27 @@ for d in dirs:
     ### legends
     #legend_label = legend[model_list.index(model)]
     #legend_label = legend[fit_list.index(fit)]
-
+    #slope = pfit[0]
+    #intercept = pfit[1]
+    #line = str(round(slope, 3))+'$x + $' + str(round(intercept, 2))
+    
     ### plots
     #plt.plot(fit_x,(0.5+model.predict(fit_x)), label=legend_label)
     #plt.plot(fit_x,fit(fit_x), label=legend_label, linewidth=1)
-
+    # + ' (' + line+')'
+    
     #plt.ylabel('Fraction of cooperators')
     #plt.xlabel('r')
     #plt.xlim([0,0.5])
     #plt.ylim([0,1])
     
 
-plt.title('Model: Reputation, Network: Scalefree')
-plt.ylabel('Fraction of cooperators')
-plt.xlabel('r')
+plt.title('Network: Scalefree, Model: Reputation')
+plt.ylabel('Fraction of Cooperators ($f_{C}$)')
+plt.xlabel('$r$')
+#plt.xscale('log')
 plt.xlim([0,0.5])
-plt.ylim([0,1])
+plt.ylim([0,1.1])
 
 plt.legend()
 plt.show()
