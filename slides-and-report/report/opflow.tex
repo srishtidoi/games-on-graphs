@@ -1,0 +1,48 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{latexsym}
+\usepackage{geometry}
+\usepackage{amssymb}
+\usepackage{mathtools, nccmath}
+\usepackage{tikz}
+\usepackage{palatino}
+
+
+\setlength\topmargin{0cm}    
+\setlength\oddsidemargin{-0cm}   
+
+
+\usetikzlibrary{shapes.geometric,arrows, fit,positioning}
+%\usetikzlibrary{arrows.meta}
+
+\begin{document}
+	
+\centering
+
+\tikzstyle{line} = [draw, -latex']  
+\tikzstyle{cloud} = [draw, text centered, rectangle,node distance=2.5cm, minimum height=1em]  
+	
+
+		\begin{tikzpicture}[node distance = 1cm, auto, scale=\textwidth] % the command node distance is important as it determines the space or the length of the arrow between different blocks.  
+		% the command given below are the place of nodes  
+			\tikzstyle{every node}=[font=\small]
+			\node [cloud] (init) {Focal agent chosen at random};  
+			\node [cloud, below left of = init, text width=7em, xshift=-2cm](C){Payoff-based Imitation};  
+			\node [cloud, below right of = init, text width=7em, xshift=2cm](D){Reputation-based Imitation};  
+			\path[line] (init) -- node[anchor=east] {\textit{1-p}}(C);
+			\path[line](init) -- node[anchor=west] {\textit{p}} (D);
+			\node[cloud, below of= C, text width=10em](E){Imitate a randomly chosen neighbour based on difference in payoffs};
+			\path[line](C) -- (E);
+			\node[cloud, below right of=D , text width=10em, xshift=1cm](frb){Get access to public information $ f_{R_{B}} $};
+			\node[cloud, below left of=D , text width=10em, xshift=-1cm ](fra){Get access to public information $ f_{R_{A}} $};
+			\node[cloud, below right of=E, text width=10em, xshift=1cm] (fra1) {Adopt strategy A based on the value of personal threshold};
+			\node[cloud, right of=fra1, text width=10em, xshift=7cm] (frb1) {Adopt strategy B based on the value of personal threshold};
+			\node[cloud, below of=D, text width=12em, yshift=-3cm] (rep) {Imitate the neighbour with maximum reputation with a probability that depends on the ratio of reputations};
+			\path[line](D) -- node[anchor=east] {$ P_{f_{A}} $} (fra);
+			\path[line](D) -- node[anchor=west] {$ 1-P_{f{A}} $}(frb);
+			\path[line](fra) -- (fra1);
+			\path[line](frb) -- (frb1);
+			\path[line](fra) -- node {$ \ \ f_{R} < \text{threshold}_{f_{R}} $}(rep);
+			\path[line](frb) -- (rep);
+	\end{tikzpicture} 
+\end{document}

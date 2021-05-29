@@ -1,0 +1,119 @@
+\begin{thebibliography}{10}
+
+\bibitem{old_repeated}
+{Rational Cooperation in Finitely Repeated Prisoner's Dilemma}.
+\newblock {\em Economics and Politics}.
+
+\bibitem{tragedy}
+Garrett Hardin.
+\newblock The tragedy of the commons.
+\newblock {\em Journal of Natural Resources Policy Research}, 1(3):243--253,
+  2009.
+
+\bibitem{gametheoryandphysics}
+Christoph Hauert and György Szabó.
+\newblock {Game theory and physics}.
+\newblock {\em American Journal of Physics}, 73(5):405--414, 2005.
+
+\bibitem{spatial_reciprocity}
+Qi~Su, Aming Li, Long Wang, and H~Eugene Stanley.
+\newblock {Spatial reciprocity in the evolution of cooperation}.
+\newblock {\em Proceedings of the Royal Society B: Biological Sciences},
+  286(1900):20190041, 2019.
+
+\bibitem{stratification}
+Peng Lu and Xiaoping Zheng.
+\newblock {Social Stratification and Cooperative Behavior in Spatial Prisoners'
+  Dilemma Games}.
+\newblock {\em PLOS ONE}, 10(7):e0131005, 2015.
+
+\bibitem{Shirado}
+Hirokazu Shirado and Nicholas~A. Christakis.
+\newblock {Locally noisy autonomous agents improve global human coordination in
+  network experiments}.
+\newblock {\em Nature}, 545(7654):370--374, 2017.
+
+\bibitem{reward}
+Raúl Jiménez, Haydee Lugo, José~A. Cuesta, and Angel Sánchez.
+\newblock {Emergence and resilience of cooperation in the spatial prisoner's
+  dilemma via a reward mechanism}.
+\newblock {\em Journal of Theoretical Biology}, 250(3):475--483, 2008.
+
+\bibitem{social_reward}
+Yu’e Wu, Shuhua Chang, Zhipeng Zhang, and Zhenghong Deng.
+\newblock {Impact of Social Reward on the Evolution of the Cooperation Behavior
+  in Complex Networks}.
+\newblock {\em Scientific Reports}, 7(1):41076, 2017.
+
+\bibitem{replicator_dynamics}
+Christoph Hauert.
+\newblock {Replicator dynamics of reward \& reputation in public goods games}.
+\newblock {\em Journal of Theoretical Biology}, 267(1):22--28, 2010.
+
+\bibitem{antisocial_rewarding}
+Miguel~dos Santos and Jorge Peña.
+\newblock {Antisocial rewarding in structured populations}.
+\newblock {\em Scientific Reports}, 7(1):6212, 2017.
+
+\bibitem{punishment}
+Xianjia Wang and Shaojie Lv.
+\newblock {The public goods game with shared punishment cost in well-mixed and
+  structured populations}.
+\newblock {\em Journal of Theoretical Biology}, 476:36--43, 2019.
+
+\bibitem{synergy}
+The~Anh Han and Tom Lenaerts.
+\newblock {A synergy of costly punishment and commitment in cooperation
+  dilemmas}.
+\newblock {\em Adaptive Behavior}, 24(4):237--248, 2016.
+
+\bibitem{shared_cost}
+Chunyan Zhang, Yuying Zhu, Zengqiang Chen, and Jianlei Zhang.
+\newblock {Punishment in the form of shared cost promotes altruism in the
+  cooperative dilemma games}.
+\newblock {\em Journal of Theoretical Biology}, 420:128--134, 2017.
+
+\bibitem{overpunishing}
+Fabio Dercole, Marco~De Carli, Fabio~Della Rossa, and Alessandro~V.
+  Papadopoulos.
+\newblock {Overpunishing is not necessary to fix cooperation in voluntary
+  public goods games}.
+\newblock {\em Journal of Theoretical Biology}, 326:70--81, 2013.
+
+\bibitem{memory_effect}
+Wenwen Lu, Juan Wang, and Chengyi Xia.
+\newblock {Role of memory effect in the evolution of cooperation based on
+  spatial prisoner's dilemma game}.
+\newblock {\em Physics Letters A}, 382(42-43):3058--3063, 2018.
+
+\bibitem{incomplete_info}
+Xiuqin Deng and Jiadi Deng.
+\newblock {A Study of Prisoner’s Dilemma Game Model with Incomplete
+  Information}.
+\newblock {\em Mathematical Problems in Engineering}, 2015:1--10, 2015.
+
+\bibitem{external_forcing}
+Keke Huang, Yichi Zhang, Yonggang Li, Chunhua Yang, and Zhen Wang.
+\newblock {Effects of external forcing on evolutionary games in complex
+  networks}.
+\newblock {\em Chaos: An Interdisciplinary Journal of Nonlinear Science},
+  28(9):093108, 2018.
+
+\bibitem{publicinfo_china}
+Hongsen Luo, Ying Gao, and Fulei Shi.
+\newblock {An Evolutionary Game Analysis on Public Information Communication
+  between the Government and the Public in China}.
+\newblock {\em Complexity}, 2021:1--11, 2021.
+
+\bibitem{inferring_reputation}
+Zhen Wang, Lin Wang, Zi-Yu Yin, and Cheng-Yi Xia.
+\newblock {Inferring Reputation Promotes the Evolution of Cooperation in
+  Spatial Social Dilemma Games}.
+\newblock {\em PLoS ONE}, 7(7):e40218, 2012.
+
+\bibitem{review}
+György Szabó and Gábor Fáth.
+\newblock {Evolutionary games on graphs}.
+\newblock {\em Physics Reports}, 446(4-6):97--216, 2007.
+
+\end{thebibliography}

@@ -1,5 +1,13 @@
 \BOOKMARK [1][-]{section.1}{Introduction}{}% 1
 \BOOKMARK [1][-]{section.2}{Models}{}% 2
-\BOOKMARK [2][-]{subsection.2.1}{Probability Distribution Model}{section.2}% 3
-\BOOKMARK [2][-]{subsection.2.2}{fc-Threshold Model}{section.2}% 4
-\BOOKMARK [2][-]{subsection.2.3}{Reputation Model}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.1}{Probability Distribution Model \(PDist\)}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{fc-Threshold Model \(fcT\)}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Reputation Model \(Rep\)}{section.2}% 5
+\BOOKMARK [1][-]{section.3}{Results}{}% 6
+\BOOKMARK [1][-]{section.4}{Application in Opinion Dynamics}{}% 7
+\BOOKMARK [1][-]{section.5}{Conclusion}{}% 8
+\BOOKMARK [1][-]{appendix.A}{Appendix}{}% 9
+\BOOKMARK [2][-]{subsection.A.1}{Model PDist}{appendix.A}% 10
+\BOOKMARK [2][-]{subsection.A.2}{Model fcT}{appendix.A}% 11
+\BOOKMARK [2][-]{subsection.A.3}{Model Rep}{appendix.A}% 12
+\BOOKMARK [2][-]{subsection.A.4}{Opinion Dynamics Model \(Futher Details\)}{appendix.A}% 13

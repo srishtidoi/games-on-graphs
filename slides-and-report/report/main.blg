@@ -1,57 +1,49 @@
 This is BibTeX, Version 0.99d (TeX Live 2020/Arch Linux)
 Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: main.aux
-I couldn't open style file acl_natbib.bst
----line 19 of file main.aux
- : \bibstyle{acl_natbib
- :                     }
-I'm skipping whatever remains of this command
-I couldn't open database file nlp4call2021.bib
----line 20 of file main.aux
- : \bibdata{nlp4call2021
- :                      }
-I'm skipping whatever remains of this command
-I found no database files---while reading file main.aux
-I found no style file---while reading file main.aux
-You've used 5 entries,
-            0 wiz_defined-function locations,
-            95 strings with 582 characters,
-and the built_in function-call counts, 0 in all, are:
-= -- 0
-> -- 0
+The style file: unsrt.bst
+Database file #1: references.bib
+Warning--empty author in old_repeated
+Warning--empty year in old_repeated
+You've used 20 entries,
+            1791 wiz_defined-function locations,
+            574 strings with 6724 characters,
+and the built_in function-call counts, 4620 in all, are:
+= -- 419
+> -- 196
 < -- 0
-+ -- 0
-- -- 0
-* -- 0
-:= -- 0
-add.period$ -- 0
-call.type$ -- 0
-change.case$ -- 0
++ -- 73
+- -- 53
+* -- 372
+:= -- 749
+add.period$ -- 59
+call.type$ -- 20
+change.case$ -- 20
 chr.to.int$ -- 0
-cite$ -- 0
-duplicate$ -- 0
-empty$ -- 0
-format.name$ -- 0
-if$ -- 0
+cite$ -- 22
+duplicate$ -- 179
+empty$ -- 450
+format.name$ -- 53
+if$ -- 990
 int.to.chr$ -- 0
-int.to.str$ -- 0
-missing$ -- 0
-newline$ -- 0
-num.names$ -- 0
-pop$ -- 0
-preamble$ -- 0
+int.to.str$ -- 20
+missing$ -- 20
+newline$ -- 102
+num.names$ -- 19
+pop$ -- 24
+preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 0
+skip$ -- 68
 stack$ -- 0
-substring$ -- 0
-swap$ -- 0
+substring$ -- 399
+swap$ -- 20
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 0
-while$ -- 0
-width$ -- 0
-write$ -- 0
-(There were 4 error messages)
+warning$ -- 2
+while$ -- 50
+width$ -- 22
+write$ -- 218
+(There were 2 warnings)
