@@ -247,7 +247,7 @@ class Agent:
         #p_info = 0.7 # probability of coming across a piece of public info
 
         k_b2 = 1.5 # noise parameter for factor (rule bayesian2)
-        p_fc = 0.0   # probability of know total fc
+        p_fc = 0.7   # probability of know total fc
 
         #################################################################
 
@@ -256,7 +256,7 @@ class Agent:
         elif rule == "bayesian":
             self.__bayesian(agents, k_by, p_max)
         elif rule == "reputation":
-            self.__reputation(agents, k_r1, k_r2, p, 0.5, fr)
+            self.__reputation(agents, k_r1, k_r2, p, 1, fr)
         elif rule == "bayesian2":
             self.__bayesian2(agents, k_b2, p_fc, fc)
 

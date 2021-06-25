@@ -32,16 +32,19 @@ print(i)
 xp = np.linspace(0, 1, 100)
 xn = np.linspace(-1, 0, 100)
 
-yp = -0.913 + 2.25/(1+1.3*np.exp(-xp/0.5))
+yp = -0.9311 + 2/(1+np.exp(-xp/0.3))
 plt.plot(xp, yp, 'r-')
 plt.plot(xp, xp, 'b--', linewidth=0.5)
 
-yn = 0.913 - 2.25/(1+1.3*np.exp(xn/0.5))
+yn = 0.9311 - 2/(1+np.exp(xn/0.3))
 plt.plot(xn, yn, 'r-')
 plt.plot(xn, xn, 'b--', linewidth=0.5)
 
 plt.grid(True)
 plt.axhline(y=0, color='k')
 plt.axvline(x=0, color='k')
+plt.xlabel('Reputation before updation')
+plt.ylabel('Reputation after updation')
+plt.title('Evolution of Reputation')
 
-#plt.show()
+plt.show()

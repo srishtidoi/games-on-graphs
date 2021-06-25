@@ -1,3 +1,22 @@
+################################################################################
+#
+# To plot multiple simulations in the same figure. Give the list of files as
+# dirs and the labels as the legend.the plot title and limts can be specified.
+#
+# Run from outside the target directories.
+#
+################################################################################
+################################################################################
+
+dirs = ['scalefree_reputation_n100e100_p0.3', 'scalefree_reputation_n100e100_fr_p0.3']
+legend = ['without $f_{R}$', 'with $f_{R}$']
+plot_title = 'Network: Scalefree, Model: Reputation'
+log_scale = False
+x_lims = [0,0.5]
+y_lims = [0, 1.1]
+
+################################################################################
+
 import numpy as np
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
@@ -6,15 +25,6 @@ import os
 import re
 import sys
 import random as rnd
-
-# list of directories with the phase diagrams
-dirs = ['scalefree_reputation_n100e100_p0.3', 'scalefree_reputation_n100e100_fr_p0.3']
-    #'pi0.0','pi0.5','pi0.5_onlyrep','pi0.5_onlyrep_tend0.5','pi0.5_tend0.5','pi0.7','pi0.9','pi1.0','pi1.0_tend0.5']
-
-    # list of p values
-legend = ['without $f_{R}$', 'with $f_{R}$']
-    #'$p=0.0$','$p=0.5$','$p=0.5$ (info only for rep)','$p=0.5$ (info only for rep, constant tendency = 0.5)','$p=0.5$ (contant tendency = 0.5)', '$p=0.7$', '$p=0.9$','$p=1.0$','$p=1.0$ (constant value of tendency = 0.5)']
-    #'$p=0.7, p_{info}=0.0$','$p=0.7, p_{info}=0.3$','$p=0.7, p_{info}=0.5$','$p=0.7, p_{info}=0.7$']
 
 x_list = []
 fc_list = []
@@ -80,25 +90,34 @@ for d in dirs:
     fd = 1 - fc # fraction of defectors
 
 
-    ### fitting
+    #####################
+    #      Fitting
+    ####################
+
+    ### for polynomial fit of degree d, use pfit and fit. Uncomment this region
     #pfit = np.polyfit(x, fc, 2)
-    #fit = np.poly1d(pfit)      # polynomial fit
-    #model = sm.OLS(fc - 0.5, x).fit()         # linear fit with fixed intercept
+    #fit = np.poly1d(pfit)
+    #fit_list.append(fit)
+    
+    ### for a linear fit with fixed intercept, use model. Uncomment this region
+    #model = sm.OLS(fc - 0.5, x).fit()        
+    #model_list.append(model)
+    
+    ### plotting the actual data points as background to the fit
     #plt.plot(x, fc, 'k-', linewidth=0.5, alpha=0.7)
     
-    ### if no fit is needed
+    ### If not fit is required
     
     legend_label = legend[dirs.index(d)]      
     plt.plot(x, fc, linewidth=1, label=legend_label)
     
     x_list.append(x)
     fc_list.append(fc)
-    #fit_list.append(fit)
-    #model_list.append(model)
-    os.chdir('..')
+    os.chdir('..') # go back to the parent directory
 
-# plotting all the fits 
-#for fit in fit_list:
+### plotting all the fits 
+
+# for fit in fit_list:
 
     ### legends
     #legend_label = legend[model_list.index(model)]
@@ -118,12 +137,15 @@ for d in dirs:
     #plt.ylim([0,1])
     
 
-plt.title('Network: Scalefree, Model: Reputation')
+plt.title(plot_title)
 plt.ylabel('Fraction of Cooperators ($f_{C}$)')
 plt.xlabel('$r$')
-#plt.xscale('log')
-plt.xlim([0,0.5])
-plt.ylim([0,1.1])
+
+if  log_scale:
+    plt.xscale('log')
+
+plt.xlim(x_lims)
+plt.ylim(y_lims)
 
 plt.legend()
 plt.show()

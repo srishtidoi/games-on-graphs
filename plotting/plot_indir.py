@@ -11,7 +11,7 @@ import random as rnd
 ####
 # the max value of x for fitting and showing
 
-x_max = 1
+x_max = 0.05
 
 ####
 
@@ -72,17 +72,18 @@ for filename in files:
 print('fc = ', fc)
 fc = fc/len(files) # taking average over all episodes
 fd = 1 - fc # fraction of defectors
-fit = np.poly1d(np.polyfit(x, fc, 3))
-fit_x = np.linspace(0, x_max, 100)
+fit = np.poly1d(np.polyfit(x, fc, 5))
+fit_x = np.linspace(0, 0.04, 100)
 
-plt.scatter(x, fc, s=3, edgecolors='g', label = 'cooperators')
-plt.plot(fit_x, fit(fit_x), linewidth=1)
+plt.plot(x, fc,'k-', linewidth=0.5, alpha=0.8)
+plt.plot(fit_x, fit(fit_x),'g-', linewidth=1)
 #plt.plot(x, fc, 'k-', alpha=0.8)
 
-plt.ylabel('Fraction of cooperators')
-plt.xlabel('r')
+plt.ylabel('Fraction of Cooperators ($f_{C}$)')
+plt.xlabel('$r$')
 plt.xlim([0,x_max])
-plt.ylim([-0.1,1.1])
+plt.ylim([0,1.1])
+plt.title('Network:Smallworld')
 #plt.axis([0, 0.07, 0, 1])
 #plt.xticks([0, 0.01, 0.02, 0.03])
 #plt.legend()

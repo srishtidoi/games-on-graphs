@@ -1,6 +1,0 @@
-higher prob th to compare with previous plots. value of Q is fixed at 0.6 because fc tapers slowly at this value.
-r = 0:0.3(0.003)
-prob threshold = 0.4 (k=1.5)
-new convergence condition
-
-observation: starts higher than low prob threshold and doesnt go to 0 till 0.3 (reaches 0.2)

@@ -205,8 +205,8 @@ class Simulation:
         fc = initial_fc
         #print(fc)
         for t in range(1, tmax+1):
-            self.__count_payoff(1, game="OPDYN")
-            fr = self.__count_fr(game="OPDYN")
+            self.__count_payoff(r, game="PD")
+            fr = self.__count_fr(game="PD")
             self.__update_strategy(rule = rule, fc=fc, fr=fr, p_c=r) # rule = imitate, bayesian, reputation
             
             fc = self.__count_fc()
@@ -269,7 +269,7 @@ class Simulation:
         ####################################################################
         
         if output == 'null': # range of values for regular sim
-            r_range = np.arange(0, 1, 0.01)
+            r_range = np.arange(0, 0.05, 0.001)
         elif output == 'rep': # value of r for sim with rep output
             r_range = [0.9]
 

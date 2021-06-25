@@ -1,3 +1,12 @@
+################################################################################
+#
+# To plot the transition probabilitiy function for reputation based simulations
+# for opdyn simulations. 
+# Does not require any input files.
+#
+################################################################################
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 import random as rnd

@@ -7,11 +7,11 @@
 #### rule: learning rule - imitate, bayesian, reputation
 #### out: kind of output - null, rep (for time evolution of reputation parameter) 
 
-note=p0.3_0.7_fr
+note=
 population=100
 eps=100
-network=scalefree
-rule=reputation
+network=smallworld
+rule=imitate
 out=null
 
 #### make and cd to new directory

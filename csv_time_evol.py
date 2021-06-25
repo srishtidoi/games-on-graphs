@@ -1,3 +1,20 @@
+################################################################################
+#
+# To generate time evolution plots for csv files (given as an output in 
+# later opdyn sims). Scrapes all the csv files and averages over n_eps 
+# number of episodes. Plots n_plots number of such plots so that they 
+# can be compared.
+# 
+# To be run from inside the target directory
+#
+################################################################################
+################################################################################
+
+n_plots = 50
+n_eps = 1
+
+################################################################################
+
 import numpy as np
 import matplotlib.pyplot as plt
 import csv
@@ -6,15 +23,7 @@ import re
 import sys
 import random as rnd
 
-
-#####################################################################
-
-n_plots = 50
-
-#####################################################################
-
 all_files = os.listdir() # get list of all files in the working directory
-n_eps = 1
 
 files = []
 for f in all_files:
